@@ -3,8 +3,17 @@ import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
+  template: `
+  <main class="main">
+    <nav>
+      <a href="/">Home</a>
+      |
+      <a href="/profile">Profile</a>
+    </nav>
+    </main>
+    <router-outlet />
+  `,
   imports: [RouterOutlet],
-  templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {

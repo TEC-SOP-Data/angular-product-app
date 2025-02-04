@@ -1,0 +1,66 @@
+.title {
+    font-family: 'Arial', sans-serif; /* Vælg en font */
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+  }
+  
+  .update-btn {
+    background-color: #28a745; /* Grøn farve */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s;
+  }
+  
+  .update-btn:hover {
+    background-color: #218838; /* Mørkere grøn ved hover */
+  }
+/* Gør knap + input til én linje */
+.input-container {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Lidt afstand mellem input og knap */
+    max-width: 250px; /* Sørger for, at det ikke fylder hele skærmen */
+  }
+  
+  /* Inputfelt begrænset i bredde */
+  .input-container input {
+    width: 100px; /* Fast bredde, kan justeres */
+    padding: 6px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center; /* Centrer tekst i feltet */
+  }
+  
+  /* Knap tilpasset inputfeltets højde */
+  .update-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 6px 8px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    height: 32px; /* Matcher inputfeltet */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s;
+  }
+  
+  .update-btn:hover {
+    background-color: #218838;
+  }
+  
+  /* Gør ikonet lidt mindre */
+  .update-btn .material-icons {
+    font-size: 16px;
+  }
+  
+  
