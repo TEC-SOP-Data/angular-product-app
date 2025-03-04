@@ -1,14 +1,10 @@
 <h2 class="title">Produkter</h2>
 <div *ngFor="let product of products" class="product-item">
-  <p>{{ product.name }} - {{ product.price }} DKK</p>
-  <div class="input-container">
+  <p>{{ product.category }} - {{ product.name }} - {{ product.price }} DKK</p>
+  <!-- <div class="input-container">
     <input type="number" [(ngModel)]="newPrices[product.id]" placeholder="Ny pris">
-    <!-- <button class="update-btn" (click)="editPrice(product)">Opdater pris</button> -->
     <button class="update-btn" (click)="editPrice(product)">
       <span class="material-icons">edit</span> Opdater
     </button>
-    
-  </div>
-  </div>
-  
-  
+  </div> -->
+</div>
