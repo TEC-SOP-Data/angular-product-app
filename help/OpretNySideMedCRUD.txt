@@ -1,0 +1,231 @@
+OPRET SIDE:
+ng generate component companies
+
+OPRET SERVICE TIL SIDE:
+ng generate service company
+
+COMPANY.SERVICE.TS
+Kommunikerer med din API for at hente, oprette, opdatere og slette Companies.
+
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CompanyService {
+  private apiUrl = 'https://localhost:7031/api/companies'; // API URL til Companies
+
+  constructor(private http: HttpClient) {}
+
+  // Hent alle companies
+  getCompanies(): Observable<any[]> {
+    return this.http.get<any[]>(this.apiUrl);
+  }
+
+  // Opret en ny company
+  createCompany(company: any): Observable<any> {
+    return this.http.post<any>(this.apiUrl, company);
+  }
+
+  // Opdater en eksisterende company
+  updateCompany(id: number, company: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${id}`, company);
+  }
+
+  // Slet en company
+  deleteCompany(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+}
+
+COMPANIES.COMPONENT.TS
+I companies.component.ts kan du bruge CompanyService til at hente data, vise dem i en liste og håndtere oprettelse, opdatering og sletning.
+
+import { Component, OnInit } from '@angular/core';
+import { CompanyService } from '../services/company.service';
+
+@Component({
+  selector: 'app-companies',
+  templateUrl: './companies.component.html',
+  styleUrls: ['./companies.component.css']
+})
+export class CompaniesComponent implements OnInit {
+  companies: any[] = [];
+  newCompany: any = {
+    name: '',
+    educationalBranch: '',
+    homepage: '',
+    companySize: null
+  };
+
+  constructor(private companyService: CompanyService) {}
+
+  ngOnInit(): void {
+    this.loadCompanies();
+  }
+
+  loadCompanies(): void {
+    this.companyService.getCompanies().subscribe((data: any[]) => {
+      this.companies = data;
+    });
+  }
+
+  createCompany(): void {
+    if (this.newCompany.name && this.newCompany.educationalBranch) {
+      this.companyService.createCompany(this.newCompany).subscribe((createdCompany: any) => {
+        this.companies.push(createdCompany);  // Tilføj til listen
+        this.newCompany = { name: '', educationalBranch: '', homepage: '', companySize: null };  // Nulstil formularen
+      });
+    }
+  }
+
+  updateCompany(company: any): void {
+    this.companyService.updateCompany(company.id, company).subscribe((updatedCompany: any) => {
+      // Opdater listen med den ændrede company
+      const index = this.companies.findIndex(c => c.id === updatedCompany.id);
+      if (index !== -1) {
+        this.companies[index] = updatedCompany;
+      }
+    });
+  }
+
+  deleteCompany(id: number): void {
+    this.companyService.deleteCompany(id).subscribe(() => {
+      this.companies = this.companies.filter(c => c.id !== id);
+    });
+  }
+}
+
+COMPANIES.COMPONENT.HTML
+<h2>Companies</h2>
+
+<!-- Formular til oprettelse af company -->
+<div>
+  <h3>Opret Company</h3>
+  <form (ngSubmit)="createCompany()">
+    <label for="name">Navn:</label>
+    <input type="text" id="name" [(ngModel)]="newCompany.name" name="name" required />
+    
+    <label for="educationalBranch">Uddannelsesbranche:</label>
+    <input type="text" id="educationalBranch" [(ngModel)]="newCompany.educationalBranch" name="educationalBranch" required />
+    
+    <label for="homepage">Hjemmeside:</label>
+    <input type="text" id="homepage" [(ngModel)]="newCompany.homepage" name="homepage" />
+
+    <label for="companySize">Størrelse på virksomhed:</label>
+    <input type="number" id="companySize" [(ngModel)]="newCompany.companySize" name="companySize" />
+
+    <button type="submit">Opret</button>
+  </form>
+</div>
+
+<!-- Vis liste af companies -->
+<h3>Liste af Companies</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Navn</th>
+      <th>Uddannelsesbranche</th>
+      <th>Hjemmeside</th>
+      <th>Størrelse</th>
+      <th>Handlinger</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let company of companies">
+      <td>{{ company.name }}</td>
+      <td>{{ company.educationalBranch }}</td>
+      <td>{{ company.homepage }}</td>
+      <td>{{ company.companySize }}</td>
+      <td>
+        <button (click)="updateCompany(company)">Opdater</button>
+        <button (click)="deleteCompany(company.id)">Slet</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+API skal også opdateres til at kunne håndtere CRUD-handlingerne
+[Route("api/[controller]")]
+[ApiController]
+public class CompaniesController : ControllerBase
+{
+    private readonly ApplicationDbContext _context;
+
+    public CompaniesController(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+
+    // GET: api/companies
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Companies>>> GetCompanies()
+    {
+        return await _context.Companies.ToListAsync();
+    }
+
+    // POST: api/companies
+    [HttpPost]
+    public async Task<ActionResult<Companies>> CreateCompany(Companies company)
+    {
+        _context.Companies.Add(company);
+        await _context.SaveChangesAsync();
+        return CreatedAtAction("GetCompany", new { id = company.Id }, company);
+    }
+
+    // PUT: api/companies/5
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateCompany(int id, Companies company)
+    {
+        if (id != company.Id)
+        {
+            return BadRequest();
+        }
+
+        _context.Entry(company).State = EntityState.Modified;
+
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!CompanyExists(id))
+            {
+                return NotFound();
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        return NoContent();
+    }
+
+    // DELETE: api/companies/5
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteCompany(int id)
+    {
+        var company = await _context.Companies.FindAsync(id);
+        if (company == null)
+        {
+            return NotFound();
+        }
+
+        _context.Companies.Remove(company);
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
+
+    private bool CompanyExists(int id)
+    {
+        return _context.Companies.Any(e => e.Id == id);
+    }
+}
+

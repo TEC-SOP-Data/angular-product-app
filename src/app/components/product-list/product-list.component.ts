@@ -1,43 +1,44 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProductService, Product } from '../../services/product.service';
 import { FormsModule } from '@angular/forms';
+import { ProductService } from '../../services/product.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [CommonModule, FormsModule], // Husk FormsModule for ngModel
+  imports: [CommonModule, FormsModule],
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css']
 })
-export class ProductListComponent {
-  products: Product[] = [];
-  newPrices: { [key: number]: number } = {}; // Holder styr på midlertidige priser
+export class ProductListComponent implements OnInit {
+  product = { name: '', category: '', price: 0 };
+  products: any[] = [];
 
   constructor(private productService: ProductService) {}
 
   ngOnInit(): void {
-    this.productService.getProducts().subscribe((data) => {
+    this.loadProducts();
+  }
+
+  loadProducts(): void {
+    this.productService.getProducts().subscribe((data: any[]) => {
       this.products = data;
     });
   }
 
-  editPrice(product: Product) {
-    const newPrice = this.newPrices[product.id]; // Hent den indtastede pris
-
-    if (!newPrice || newPrice <= 0) {
-      alert('Indtast en gyldig pris!');
-      return;
+  createProduct(): void {
+    if (this.product.name && this.product.category && this.product.price > 0) {
+      this.productService.createProduct(this.product).subscribe((newProduct: any) => {
+        this.products.push(newProduct); // Tilføj produktet til listen
+        this.product = { name: '', category: '', price: 0 }; // Nulstil formularen
+      });
     }
+  }
 
-    const updatedProduct = { ...product, price: newPrice };
-
-    this.productService.updateProduct(updatedProduct).subscribe(() => {
-      product.price = newPrice; // Opdater UI
-      delete this.newPrices[product.id]; // Ryd inputfeltet
-    }, error => {
-      console.error('Fejl ved opdatering:', error);
-      alert('Kunne ikke opdatere produktet.');
+  deleteProduct(id: number): void {
+    this.productService.deleteProduct(id).subscribe(() => {
+      this.products = this.products.filter(p => p.id !== id);
     });
   }
 }

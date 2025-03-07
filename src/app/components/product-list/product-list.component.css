@@ -6,6 +6,67 @@
     text-align: center;
   }
   
+form {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  margin: 20px auto;
+}
+
+div {
+  margin-bottom: 10px;
+}
+
+label {
+  font-weight: bold;
+}
+
+.container {
+  max-width: 600px; /* Centrerer og begrænser bredden */
+}
+
+.form-control {
+  border: none; /* Fjerner kant fra inputfelter */
+  border-bottom: 1px solid #ccc; /* Tilføjer en let understregning */
+  border-radius: 0;
+}
+
+.btn-success {
+  white-space: nowrap; /* Sikrer, at knappen ikke vokser */
+}
+
+
+
+
+/* button {
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+} */
+
+table {
+  width: 80%;
+  margin: 20px auto;
+  border-collapse: collapse;
+}
+
+table, th, td {
+  border: 1px solid black;
+}
+
+th, td {
+  padding: 10px;
+  text-align: center;
+}
+
+
   .update-btn {
     background-color: #28a745; /* Grøn farve */
     color: white;
