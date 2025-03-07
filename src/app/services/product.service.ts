@@ -15,7 +15,7 @@ export interface Product {
 export class ProductService {
   private apiUrl = 'https://localhost:7031/api/product';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(this.apiUrl);
