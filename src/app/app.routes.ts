@@ -1,13 +1,14 @@
 import { Routes } from '@angular/router';
+import { SliderComponent } from './slider/slider.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { ProfileComponent } from './profile/profile.component';
 import { CompanyComponent } from './companies/companies.component';
 
 export const routes: Routes = [
-  // { path: '', component: ProductListComponent },
-  { path: '', component: ProfileComponent }, // Profilside
+  { path: '', component: SliderComponent },
+  { path: 'profile', component: ProfileComponent }, // Profilside
   { path: 'products', component: ProductListComponent },
-  {path: 'companies', component: CompanyComponent}
+  { path: 'companies', component: CompanyComponent }
 ];
 
 

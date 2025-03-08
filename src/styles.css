@@ -1,9 +1,26 @@
 /* You can add global styles to this file, and also import other style files */
 .active {
-    font-weight: bold;
-    color: blue;
-  }
-  .pagetitle{
-    margin: 20px;
-  }
-  
+  font-weight: bold;
+  color: blue;
+}
+
+.pagetitle {
+  margin: 20px;
+}
+
+.c-item {
+  height: 900px;
+}
+
+.c-img {
+  height: 98%;
+  object-fit: cover;
+}
+
+.black-text {
+  color: black;
+}
+
+.white-text {
+  color: white;
+}

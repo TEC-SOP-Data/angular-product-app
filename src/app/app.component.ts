@@ -8,13 +8,14 @@ import { RouterOutlet, RouterModule } from '@angular/router';
     <header>
   <nav>
     <ul>
-      <li><a routerLink="/">Home</a></li>
-      <li><a routerLink="/products">Projekter</a></li>
+      <li><a routerLink="/">Min slider-side</a></li>
+      <!-- <li><a routerLink="/products">Projekter</a></li>
       <li><a routerLink="/companies">Karrieredag</a></li>
-      <li><a href="#">Om</a></li>
+      <li><a href="/profile">Om</a></li> -->
     </ul>
   </nav>
 </header>
+
 
     <!-- <nav>
         <button routerLink="/" class="btn btn-primary">Profile</button>
